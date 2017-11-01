@@ -1,0 +1,25 @@
+# Архивы, дистрибутивы
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Базы данных, логи
+*.log
+*.sql
+*.sqlite
+
+# Спецфайлы операционных систем
+Thumbs.db
+Desktop.ini
+.DS_Store*
+ehthumbs.db
+Icon?
+
+# Модули Node, логи npm
+node_modules
+npm-debug.log
