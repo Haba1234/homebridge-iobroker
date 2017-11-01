@@ -12,7 +12,27 @@ In developing!
 
 # Configuration
 
-Soon....
+Example file */root/.homebridge/config.json*
+
+```
+{
+    "bridge": {
+        "name": "Homebridge",
+        "username": "CC:22:3D:E3:CE:35",
+        "port": 51826,
+        "pin": "000-00-000"
+    },
+    "description": "Config file with just iobroker",
+    "platforms": [
+        {
+            "platform" : "homebridge-iobroker.iobroker",
+            "name" : "iobroker",
+            "host": "http://localhost:8084",
+            "ID": "javascript.0.Signalka.battery"
+        }
+    ]   
+}
+```
 
 # ToDo
 
