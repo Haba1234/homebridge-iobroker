@@ -1,0 +1,23 @@
+{
+  "name": "homebridge-iobroker",
+  "version": "0.0.1",
+  "description": "Iobroker plugin for homebridge",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "keywords": [
+    "homebridge-plugin",
+    "iobroker"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Haba1234/homebridge-iobroker.git"
+  },
+  "engines": {
+    "node": ">=0.12.0",
+    "homebridge": ">=0.2.5"
+  },
+  "dependencies": {
+    "socket.io-client": "^2.0.4"
+  },
+  "main": "index.js"
+}
