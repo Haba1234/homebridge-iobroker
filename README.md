@@ -22,15 +22,21 @@ Example file */root/.homebridge/config.json*
         "port": 51826,
         "pin": "000-00-000"
     },
+
     "description": "Config file with just iobroker",
+    
     "platforms": [
         {
             "platform" : "homebridge-iobroker.iobroker",
             "name" : "iobroker",
             "host": "http://localhost:8084",
-            "ID": "javascript.0.Signalka.battery"
+            "switches": [
+                "adapter.0.object_1",
+                "adapter.0.object_2",
+                "adapter.0.object_3"
+             ]
         }
-    ]   
+    ]
 }
 ```
 
