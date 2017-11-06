@@ -38,6 +38,7 @@ function iobroker(log, config, api) {
       // Save the API object as plugin needs to register new accessory via this object
       this.api = api;
       this.Conn = new servConn();
+      this.Conn.filter = this.config.filter;
       
       // Listen to event "didFinishLaunching", this means homebridge already finished loading cached accessories.
       // Platform Plugin should only register new accessory that doesn't exist in homebridge after this event.
@@ -46,7 +47,6 @@ function iobroker(log, config, api) {
         platform.log.info("DidFinishLaunching");
         this.log.debug("Number of chaced Accessories: %s", this.cachedAccessories);
         this.log.info("Number of Accessories: %s", Object.keys(this.accessories).length);
-        //this.didFinishLaunching();
         this.log('Start socket');
   //servConn.namespace = 'homebridge';
   //servConn._useStorage = false;
@@ -73,10 +73,10 @@ function iobroker(log, config, api) {
             },
             "onUpdate": function (id, state) {
                 setTimeout(function () {
-                    platform.log.info('NEW VALUE of ' + id + ': ' + JSON.stringify(state));
+                    platform.log.debug('NEW VALUE of ' + id + ': ' + JSON.stringify(state));
                 }, 0);
                 //platform.log.info('that.accessories[id] ' + JSON.stringify(that.accessories[id]));
-                if (that.accessories[id] !== 'undefined') {
+                if (!!that.accessories[id]) { // проверка на 'undefined'
                     let accessory = that.accessories[id];
                     accessory
                       .getService(Service.Switch)
@@ -161,6 +161,7 @@ iobroker.prototype.addAccessory = function (data) {
 }
 
 // Method to setup listeners for different events
+// Настройка слушателей для разных событий
 iobroker.prototype.setService = function (accessory) {
     this.log.debug("iobroker.prototype.setService");
     //this.log.debug("accessory.context: " + JSON.stringify(accessory.context));
@@ -237,14 +238,17 @@ iobroker.prototype.getState = function (accessory, callback) {
     //this.log("accessory.displayName " + JSON.stringify(accessory));
     var ID = accessory.displayName;
     this.log.debug("accessory.displayName " + ID);
-    this.Conn.getStates(ID, function(error, data) {  
+    var timerId = setTimeout (function() {
+      that.Conn.getStates(ID, function(error, data) {  
         if (error) that.log.error("getState.error: " + error);
         that.log.debug(ID + ": data = " + JSON.stringify(data[ID]));
         //thisSwitch.state = data[accessory.displayName].val;
         var stat = false;
         if (JSON.stringify(data) !== '{}') stat = data[ID].val;
         callback (error, stat)
-    }); //  callback (null, true);
+      })
+    }, 500);
+    this.log.debug("setTimeout ID = " + timerId);
 }
 
 // Method to determine current state
@@ -299,6 +303,7 @@ iobroker.prototype.removeAccessory = function (accessory) {
 // Handler will be invoked when user try to config your plugin.
 // Callback can be cached and invoke when necessary.
 iobroker.prototype.configurationRequestHandler = function(context, request, callback) {
+  this.log.debug("iobroker.prototype.configurationRequestHandler");
   platform.log("Context: ", JSON.stringify(context));
   platform.log("Request: ", JSON.stringify(request));
 
